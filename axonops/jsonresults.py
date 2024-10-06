@@ -10,6 +10,7 @@ logger = setup_logger(__name__)
 
 org_id = get_axonops_org_id()
 
+
 def setup_json_data_directory():
     today = datetime.datetime.now()
     formatted_date = today.strftime('%Y%m%d')
@@ -20,6 +21,7 @@ def setup_json_data_directory():
     os.makedirs(new_directory_path, exist_ok=True)
 
     return new_directory_path
+
 
 def write_json_results_file(json_result, directory, suffix, cluster_name, keyspace_name=None):
     if keyspace_name is not None:
@@ -35,9 +37,3 @@ def write_json_results_file(json_result, directory, suffix, cluster_name, keyspa
     # Write JSON data to the file
     with open(file_path, 'w') as file:
         json.dump(json_result, file, indent=4)
-
-
-
-
-
-

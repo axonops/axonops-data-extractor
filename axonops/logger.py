@@ -1,6 +1,7 @@
 import logging
 import sys
 
+
 def setup_logger(name='AxonOpsLogger', level=logging.DEBUG):
     # Create a custom logger
     logger = logging.getLogger(name)

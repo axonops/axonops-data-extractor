@@ -11,6 +11,7 @@ dash_url = get_axonops_dash_url()
 # Question - what do I do about these extra args- extrapolate=false or true? &sampleResolution=5&bucketResolution=1&maxResult=2048
 __base_url = "^DASH_URL^/^ORG_ID^/api/v1/query_range?start=^START_DATE^&end=^END_DATE^&extrapolate=false&maxResult=256&getDeletedMetrics=false&query="
 
+
 def _generate_url(cluster_name, start_date, end_date, query):
     # Find the position to insert the new values
     insert_position = query.find("}")  # Find the first closing brace
@@ -79,6 +80,7 @@ def get_total_coordinator_table_reads_per_dc(cluster_name, start_date, end_date)
     axon_query = "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
     return _execute_query(axon_query, cluster_name, start_date, end_date)
 
+
 def get_total_coordinator_table_range_reads_per_dc(cluster_name, start_date, end_date):
     axon_query = "sum(cas_Table_CoordinatorScanLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
     return _execute_query(axon_query, cluster_name, start_date, end_date)
@@ -87,4 +89,3 @@ def get_total_coordinator_table_range_reads_per_dc(cluster_name, start_date, end
 def get_total_coordinator_table_writes_per_dc(cluster_name, start_date, end_date):
     axon_query = "sum(cas_Table_CoordinatorWriteLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
     return _execute_query(axon_query, cluster_name, start_date, end_date)
-
