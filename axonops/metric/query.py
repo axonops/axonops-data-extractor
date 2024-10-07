@@ -9,7 +9,7 @@ org_id = get_axonops_org_id()
 dash_url = get_axonops_dash_url()
 
 # Question - what do I do about these extra args- extrapolate=false or true? &sampleResolution=5&bucketResolution=1&maxResult=2048
-__base_url = "^DASH_URL^/^ORG_ID^/api/v1/query_range?start=^START_DATE^&end=^END_DATE^&extrapolate=false&maxResult=256&getDeletedMetrics=false&query="
+__base_url = "^DASH_URL^/^ORG_ID^/api/v1/query_range?sampleResolution=60&start=^START_DATE^&end=^END_DATE^&extrapolate=false&getDeletedMetrics=false&query="
 
 
 def _generate_url(cluster_name, start_date, end_date, query):
