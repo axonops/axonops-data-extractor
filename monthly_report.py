@@ -30,30 +30,30 @@ def main():
         write_json_results_file(json_result, directory, "live_disk_per_keyspace", cluster)
         logger.info(f'Finished get_live_disk_per_keyspace for Cassandra cluster: {cluster}')
 
-        # logger.info(f'Processing get_live_disk_space_per_dc for Cassandra cluster: {cluster}')
-        # json_result = query.get_live_disk_space_per_dc(cluster, start_datetime, end_datetime)
-        # write_json_results_file(json_result, directory, "live_disk_space_per_dc", cluster)
-        # logger.info(f'Finished get_live_disk_space_per_dc for Cassandra cluster: {cluster}')
-        #
-        # logger.info(f'Processing get_average_coordinator_table_reads_per_second_per_keyspace for Cassandra cluster: {cluster}')
-        # json_result = query.get_average_coordinator_table_reads_per_second_per_keyspace(cluster, start_datetime, end_datetime)
-        # write_json_results_file(json_result, directory, "average_coordinator_table_reads_per_second_per_keyspace", cluster)
-        # logger.info(f'Finished get_average_coordinator_table_reads_per_second_per_keyspace for Cassandra cluster: {cluster}')
-        #
-        # logger.info(f'Processing get_total_coordinator_table_reads_per_dc for Cassandra cluster: {cluster}')
-        # json_result = query.get_total_coordinator_table_reads_per_dc(cluster, start_datetime, end_datetime)
-        # write_json_results_file(json_result, directory, "total_coordinator_table_reads_per_dc", cluster)
-        # logger.info(f'Finished get_total_coordinator_table_reads_per_dc for Cassandra cluster: {cluster}')
-        #
-        # logger.info(f'Processing get_total_coordinator_table_range_reads_per_dc for Cassandra cluster: {cluster}')
-        # json_result = query.get_total_coordinator_table_range_reads_per_dc(cluster, start_datetime, end_datetime)
-        # write_json_results_file(json_result, directory, "total_coordinator_table_range_reads_per_dc", cluster)
-        # logger.info(f'Finished get_total_coordinator_table_range_reads_per_dc for Cassandra cluster: {cluster}')
-        #
-        # logger.info(f'Processing get_total_coordinator_table_writes_per_dc for Cassandra cluster: {cluster}')
-        # json_result = query.get_total_coordinator_table_writes_per_dc(cluster, start_datetime, end_datetime)
-        # write_json_results_file(json_result, directory, "total_coordinator_table_writes_per_dc", cluster)
-        # logger.info(f'Finished get_total_coordinator_table_writes_per_dc for Cassandra cluster: {cluster}')
+        logger.info(f'Processing get_live_disk_space_per_dc for Cassandra cluster: {cluster}')
+        json_result = query.get_live_disk_space_per_dc(cluster, start_datetime, end_datetime)
+        write_json_results_file(json_result, directory, "live_disk_space_per_dc", cluster)
+        logger.info(f'Finished get_live_disk_space_per_dc for Cassandra cluster: {cluster}')
+
+        logger.info(f'Processing get_average_coordinator_table_reads_per_second_per_keyspace for Cassandra cluster: {cluster}')
+        json_result = query.get_average_coordinator_table_reads_per_second_per_keyspace(cluster, start_datetime, end_datetime)
+        write_json_results_file(json_result, directory, "average_coordinator_table_reads_per_second_per_keyspace", cluster)
+        logger.info(f'Finished get_average_coordinator_table_reads_per_second_per_keyspace for Cassandra cluster: {cluster}')
+
+        logger.info(f'Processing get_total_coordinator_table_reads_per_dc for Cassandra cluster: {cluster}')
+        json_result = query.get_total_coordinator_table_reads_per_dc(cluster, start_datetime, end_datetime)
+        write_json_results_file(json_result, directory, "total_coordinator_table_reads_per_dc", cluster)
+        logger.info(f'Finished get_total_coordinator_table_reads_per_dc for Cassandra cluster: {cluster}')
+
+        logger.info(f'Processing get_total_coordinator_table_range_reads_per_dc for Cassandra cluster: {cluster}')
+        json_result = query.get_total_coordinator_table_range_reads_per_dc(cluster, start_datetime, end_datetime)
+        write_json_results_file(json_result, directory, "total_coordinator_table_range_reads_per_dc", cluster)
+        logger.info(f'Finished get_total_coordinator_table_range_reads_per_dc for Cassandra cluster: {cluster}')
+
+        logger.info(f'Processing get_total_coordinator_table_writes_per_dc for Cassandra cluster: {cluster}')
+        json_result = query.get_total_coordinator_table_writes_per_dc(cluster, start_datetime, end_datetime)
+        write_json_results_file(json_result, directory, "total_coordinator_table_writes_per_dc", cluster)
+        logger.info(f'Finished get_total_coordinator_table_writes_per_dc for Cassandra cluster: {cluster}')
 
     logger.info(f'Finished writing JSON results to {directory}')
 

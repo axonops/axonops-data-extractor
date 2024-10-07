@@ -39,9 +39,8 @@ def get_axonops_dash_url():
 def get_headers():
     headers = {
         "Authorization": f"Bearer {__axonops_cloud_api_token_secret}",
-        "Cache-Control": "no-cache",
-        "x-grafana-org-i": "axonops-capacity-report",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+        "x-grafana-org-i": "axonops-report",
+        "x-axonops-app-id": "axonops-report"
     }
     return headers
 
