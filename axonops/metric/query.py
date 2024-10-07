@@ -33,7 +33,7 @@ def _generate_url(cluster_name, start_date, end_date, query):
     return url
 
 
-def _query_api(url, cluster_name):
+def _query_api(description, unit, axon_query, url, cluster_name):
     try:
         # Make the GET request with headers
         response = requests.get(url, headers=get_headers())
@@ -41,7 +41,15 @@ def _query_api(url, cluster_name):
         # Raise an exception if the request was unsuccessful
         response.raise_for_status()
 
-        return response.json()
+        data = response.json()
+
+        # Add description and unit to each metric
+        for result in data['data']['result']:
+            result['metric']['description'] = description
+            result['metric']['unit'] = unit
+            result['metric']['axonops_query'] = axon_query
+
+        return data
 
     except requests.exceptions.HTTPError as http_err:
         print(f"HTTP error occurred: {http_err}")
@@ -51,42 +59,60 @@ def _query_api(url, cluster_name):
         print(f"JSON decode error: {json_err}")
 
 
-def _execute_query(axon_query, cluster_name, start_date, end_date):
+def _execute_query(description, unit, axon_query, cluster_name, start_date, end_date):
     url = _generate_url(cluster_name, start_date, end_date, axon_query)
     logger.debug(f'Query {axon_query} API url generated for {cluster_name} -> {url}')
-    result = _query_api(url, cluster_name)
+    result = _query_api(description, unit, axon_query, url, cluster_name)
     logger.info(f'Query {axon_query} executed for {cluster_name}')
     return result
 
 
 # Client Capacity Dashboard metrics
 def get_live_disk_space_per_keyspace(cluster_name, start_date, end_date):
+    description = "Live Disk Space Used by DC and Keyspace"
+    unit = "bytes (SI)"
+
     # axon_query = "sum(cas_Table_LiveDiskSpaceUsed{function='Count',keyspace=~'.*',scope!=''}) by (dc, keyspace)"
     axon_query = "sum(cas_Table_LiveDiskSpaceUsed{function='Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces',scope!=''}) by (dc, keyspace)"
-    return _execute_query(axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
 
 
 def get_live_disk_space_per_dc(cluster_name, start_date, end_date):
+    description = "Live Disk Space Used by DC"
+    unit = "bytes (SI)"
+
     axon_query = "sum(cas_Table_LiveDiskSpaceUsed{function='Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces',scope!=''}) by (dc)"
-    return _execute_query(axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
 
 
 def get_average_coordinator_table_reads_per_second_per_keyspace(cluster_name, start_date, end_date):
+    description = "Average Coordinator reads by Keyspace"
+    unit = "rps"
+
     axon_query = "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (keyspace)"
-    return _execute_query(axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
 
 
 # Additional metrics
 def get_total_coordinator_table_reads_per_dc(cluster_name, start_date, end_date):
+    description = "Total Coordinator Reads by DC and Keyspace"
+    unit = "rps"
+
     axon_query = "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
-    return _execute_query(axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
 
 
 def get_total_coordinator_table_range_reads_per_dc(cluster_name, start_date, end_date):
+    description = "Total Coordinator Range Reads by DC and Keyspace"
+    unit = "rps"
+
     axon_query = "sum(cas_Table_CoordinatorScanLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
-    return _execute_query(axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
 
 
 def get_total_coordinator_table_writes_per_dc(cluster_name, start_date, end_date):
+    description = "Total Coordinator Writes by DC and Keyspace"
+    unit = "wps"
+
     axon_query = "sum(cas_Table_CoordinatorWriteLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
-    return _execute_query(axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
