@@ -45,6 +45,8 @@ def _query_api(description, unit, axon_query, url, cluster_name, field_renames=N
 
         # Add description and unit to each metric
         for result in data['data']['result']:
+            result['metric']['axonops_org'] = org_id
+            result['metric']['cluster_name'] = cluster_name
             result['metric']['description'] = description
             result['metric']['unit'] = unit
             result['metric']['axonops_query'] = axon_query
