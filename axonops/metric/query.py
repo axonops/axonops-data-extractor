@@ -33,7 +33,7 @@ def _generate_url(cluster_name, start_date, end_date, query):
     return url
 
 
-def _query_api(description, unit, axon_query, url, cluster_name):
+def _query_api(description, unit, axon_query, url, cluster_name, field_renames=None):
     try:
         # Make the GET request with headers
         response = requests.get(url, headers=get_headers())
@@ -49,6 +49,12 @@ def _query_api(description, unit, axon_query, url, cluster_name):
             result['metric']['unit'] = unit
             result['metric']['axonops_query'] = axon_query
 
+            # Rename fields based on field_renames dictionary
+            if field_renames:
+                for old_field, new_field in field_renames.items():
+                    if old_field in result['metric']:
+                        result['metric'][new_field] = result['metric'].pop(old_field)
+
         return data
 
     except requests.exceptions.HTTPError as http_err:
@@ -59,10 +65,10 @@ def _query_api(description, unit, axon_query, url, cluster_name):
         print(f"JSON decode error: {json_err}")
 
 
-def _execute_query(description, unit, axon_query, cluster_name, start_date, end_date):
+def _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames=None):
     url = _generate_url(cluster_name, start_date, end_date, axon_query)
     logger.debug(f'Query {axon_query} API url generated for {cluster_name} -> {url}')
-    result = _query_api(description, unit, axon_query, url, cluster_name)
+    result = _query_api(description, unit, axon_query, url, cluster_name, field_renames)
     logger.info(f'Query {axon_query} executed for {cluster_name}')
     return result
 
@@ -98,21 +104,33 @@ def get_total_coordinator_table_reads_per_dc(cluster_name, start_date, end_date)
     description = "Total Coordinator Reads by DC and Keyspace"
     unit = "rps"
 
+    field_renames = {
+        "scope": "table",
+    }
+
     axon_query = "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
-    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
 
 
 def get_total_coordinator_table_range_reads_per_dc(cluster_name, start_date, end_date):
     description = "Total Coordinator Range Reads by DC and Keyspace"
     unit = "rps"
 
+    field_renames = {
+        "scope": "table",
+    }
+
     axon_query = "sum(cas_Table_CoordinatorScanLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
-    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
 
 
 def get_total_coordinator_table_writes_per_dc(cluster_name, start_date, end_date):
     description = "Total Coordinator Writes by DC and Keyspace"
     unit = "wps"
 
+    field_renames = {
+        "scope": "table",
+    }
+
     axon_query = "sum(cas_Table_CoordinatorWriteLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
-    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date)
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
