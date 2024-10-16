@@ -60,6 +60,16 @@ def main():
         write_json_results_file(json_result, directory, "write_counts", cluster)
         logger.info(f'Finished get_write_counts for Cassandra cluster: {cluster}')
 
+        logger.info(f'Processing get_read_counts for Cassandra cluster: {cluster}')
+        json_result = query.get_read_counts(cluster, start_datetime, end_datetime)
+        write_json_results_file(json_result, directory, "read_counts", cluster)
+        logger.info(f'Finished get_read_counts for Cassandra cluster: {cluster}')
+
+        logger.info(f'Processing get_read_scan_counts for Cassandra cluster: {cluster}')
+        json_result = query.get_read_scan_counts(cluster, start_datetime, end_datetime)
+        write_json_results_file(json_result, directory, "read_scan_counts", cluster)
+        logger.info(f'Finished get_read_scan_counts for Cassandra cluster: {cluster}')
+
     logger.info(f'Finished writing JSON results to {directory}')
 
 

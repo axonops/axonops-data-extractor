@@ -137,6 +137,7 @@ def get_total_coordinator_table_writes_per_dc(cluster_name, start_date, end_date
     axon_query = "sum(cas_Table_CoordinatorWriteLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
     return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
 
+
 def get_write_counts(cluster_name, start_date, end_date):
     description = "Total Write Counts by node and table"
     unit = "wps"
@@ -146,4 +147,28 @@ def get_write_counts(cluster_name, start_date, end_date):
     }
 
     axon_query = "cas_Table_CoordinatorWriteLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}"
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
+
+
+def get_read_counts(cluster_name, start_date, end_date):
+    description = "Total Read Counts by node and table"
+    unit = "wps"
+
+    field_renames = {
+        "scope": "table",
+    }
+
+    axon_query = "cas_Table_CoordinatorReadLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}"
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
+
+
+def get_read_scan_counts(cluster_name, start_date, end_date):
+    description = "Total Read Scan Counts by node and table"
+    unit = "wps"
+
+    field_renames = {
+        "scope": "table",
+    }
+
+    axon_query = "cas_Table_CoordinatorScanLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}"
     return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
