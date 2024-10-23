@@ -195,8 +195,8 @@ fabric.properties
 # idea folder, uncomment if you don't need it
 # .idea
 
-data/jsonresults/*
-!data/jsonresults/.gittouch
+data/results/*
+!data/results/.gittouch
 
 # General
 .DS_Store
