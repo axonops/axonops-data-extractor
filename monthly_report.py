@@ -5,10 +5,11 @@ from axonops.util.apiconfig import get_axonops_org_cassandra_clusters
 from axonops.util.time import datetime_to_unix
 from axonops.csv.jsontocsv import json_to_csv
 import time
-
+import json
 
 logger = setup_logger(__name__)
 
+config_path = 'data/reportconfig/monthly.json'
 
 def main():
     start_day = "2024-09-01"
@@ -25,40 +26,41 @@ def main():
 
     org_cassandra_clusters = get_axonops_org_cassandra_clusters()
 
-    # Define a list of queries and their corresponding descriptions and file prefixes
-    queries = [
-        (query.get_live_disk_space_per_keyspace, 'get_live_disk_per_keyspace', 'live_disk_per_keyspace'),
-        (query.get_live_disk_space_per_dc, 'get_live_disk_space_per_dc', 'live_disk_space_per_dc'),
-        (query.get_average_coordinator_table_reads_per_second_per_keyspace,
-         'get_average_coordinator_table_reads_per_second_per_keyspace',
-         'average_coordinator_table_reads_per_second_per_keyspace'),
-        (query.get_total_coordinator_table_reads_per_dc, 'get_total_coordinator_table_reads_per_dc',
-         'total_coordinator_table_reads_per_dc'),
-        (query.get_total_coordinator_table_range_reads_per_dc, 'get_total_coordinator_table_range_reads_per_dc',
-         'total_coordinator_table_range_reads_per_dc'),
-        (query.get_total_coordinator_table_writes_per_dc, 'get_total_coordinator_table_writes_per_dc',
-         'total_coordinator_table_writes_per_dc'),
-        (query.get_write_counts, 'get_write_counts', 'write_counts'),
-        (query.get_read_counts, 'get_read_counts', 'read_counts'),
-        (query.get_read_scan_counts, 'get_read_scan_counts', 'read_scan_counts')
-    ]
+    queries = __load_queries_from_config(config_path)
 
     # Iterate over the list of clusters and download the metrics
     for cluster in org_cassandra_clusters:
         logger.info(f'Starting downloading metrics for Cassandra cluster: {cluster}')
         # Process each query using the helper function
-        for query_function, description, file_prefix in queries:
-            __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, description, file_prefix)
+        for query_function, file_prefix in queries:
+            __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, file_prefix)
 
     logger.info(f'Finished writing JSON results to {results_dir}')
 
 
-def __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, description, file_prefix):
-    logger.info(f'Processing {description} for Cassandra cluster: {cluster}')
+def __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, file_prefix):
     json_result = query_function(cluster, start_datetime, end_datetime)
     json_file = write_json_results_file(json_result, results_dir, file_prefix, cluster)
+    logger.debug(f'JSON results written to: {json_file}')
     csv_file = json_to_csv(json_file)
-    logger.info(f'Finished {description} for Cassandra cluster: {cluster} to CSV file: {csv_file}')
+    logger.info(f'Generated CSV: {csv_file}')
+
+
+def __load_queries_from_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+
+    queries = []
+    for item in config['queries']:
+        function_name = item['function']
+        file_prefix = item['file_prefix']
+
+        # Dynamically get the function from the query module
+        query_function = getattr(query, function_name)
+
+        queries.append((query_function, file_prefix))
+
+    return queries
 
 
 if __name__ == "__main__":
