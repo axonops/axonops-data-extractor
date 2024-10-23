@@ -2,6 +2,8 @@ from axonops.util.apiconfig import get_axonops_org_id, get_axonops_dash_url, get
 from axonops.logger import setup_logger
 from urllib.parse import quote
 import requests
+import time
+import math
 
 logger = setup_logger(__name__)
 
@@ -36,10 +38,14 @@ def _generate_url(cluster_name, start_date, end_date, query):
 def _query_api(description, unit, axon_query, url, cluster_name, field_renames=None):
     try:
         # Make the GET request with headers
+        start_time = time.time()  # Record the start time
         response = requests.get(url, headers=get_headers())
-        logger.debug(f'API response code for {cluster_name} -> {response.status_code}')
         # Raise an exception if the request was unsuccessful
         response.raise_for_status()
+        end_time = time.time()  # Record the end time
+        # Calculate the duration in milliseconds and log it
+        duration_ms = math.ceil((end_time - start_time) * 1000)
+        logger.info(f'{duration_ms} ms time taken for API request to {url}')
 
         data = response.json()
 
@@ -60,11 +66,14 @@ def _query_api(description, unit, axon_query, url, cluster_name, field_renames=N
         return data
 
     except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
+        logger.error(f"HTTP error occurred: {http_err} for URL {url}")
+        raise RuntimeError(f"HTTP error occurred: {http_err} for URL {url}") from http_err
     except requests.exceptions.RequestException as err:
-        print(f"An error occurred: {err}")
+        logger.error(f"An requests error occurred: {err} for URL {url}")
+        raise RuntimeError(f"An error occurred: {err} for URL {url}") from err
     except ValueError as json_err:
-        print(f"JSON decode error: {json_err}")
+        logger.error(f"JSON decode error: {json_err} for URL {url}")
+        raise RuntimeError(f"JSON decode error: {json_err} for URL {url}") from json_err
 
 
 def _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames=None):
