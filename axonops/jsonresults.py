@@ -11,7 +11,7 @@ logger = setup_logger(__name__)
 org_id = get_axonops_org_id()
 
 
-def setup_json_data_directory():
+def setup_results_directory():
     today = datetime.datetime.now()
     formatted_date = today.strftime('%Y%m%d')
     directory_name = f'{formatted_date}-{uuid.uuid4()}'

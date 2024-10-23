@@ -1,6 +1,6 @@
 import axonops.metric.query as query
 from axonops.logger import setup_logger
-from axonops.jsonresults import write_json_results_file, setup_json_data_directory
+from axonops.jsonresults import write_json_results_file, setup_results_directory
 from axonops.util.apiconfig import get_axonops_org_cassandra_clusters
 from axonops.util.time import datetime_to_unix
 from axonops.csv.jsontocsv import json_to_csv
@@ -21,68 +21,44 @@ def main():
     end_datetime = datetime_to_unix(end_day, end_time)
     logger.debug(f"End date for report is {end_datetime}")
 
-    directory = setup_json_data_directory()
+    results_dir = setup_results_directory()
 
     org_cassandra_clusters = get_axonops_org_cassandra_clusters()
+
+    # Define a list of queries and their corresponding descriptions and file prefixes
+    queries = [
+        (query.get_live_disk_space_per_keyspace, 'get_live_disk_per_keyspace', 'live_disk_per_keyspace'),
+        (query.get_live_disk_space_per_dc, 'get_live_disk_space_per_dc', 'live_disk_space_per_dc'),
+        (query.get_average_coordinator_table_reads_per_second_per_keyspace,
+         'get_average_coordinator_table_reads_per_second_per_keyspace',
+         'average_coordinator_table_reads_per_second_per_keyspace'),
+        (query.get_total_coordinator_table_reads_per_dc, 'get_total_coordinator_table_reads_per_dc',
+         'total_coordinator_table_reads_per_dc'),
+        (query.get_total_coordinator_table_range_reads_per_dc, 'get_total_coordinator_table_range_reads_per_dc',
+         'total_coordinator_table_range_reads_per_dc'),
+        (query.get_total_coordinator_table_writes_per_dc, 'get_total_coordinator_table_writes_per_dc',
+         'total_coordinator_table_writes_per_dc'),
+        (query.get_write_counts, 'get_write_counts', 'write_counts'),
+        (query.get_read_counts, 'get_read_counts', 'read_counts'),
+        (query.get_read_scan_counts, 'get_read_scan_counts', 'read_scan_counts')
+    ]
+
     # Iterate over the list of clusters and download the metrics
     for cluster in org_cassandra_clusters:
         logger.info(f'Starting downloading metrics for Cassandra cluster: {cluster}')
+        # Process each query using the helper function
+        for query_function, description, file_prefix in queries:
+            __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, description, file_prefix)
 
-        logger.info(f'Processing get_live_disk_per_keyspace for Cassandra cluster: {cluster}')
-        json_result = query.get_live_disk_space_per_keyspace(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "live_disk_per_keyspace", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_live_disk_per_keyspace for Cassandra cluster: {cluster} from {json_file} to CSV file: {csv_file}')
+    logger.info(f'Finished writing JSON results to {results_dir}')
 
-        logger.info(f'Processing get_live_disk_space_per_dc for Cassandra cluster: {cluster}')
-        json_result = query.get_live_disk_space_per_dc(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "live_disk_space_per_dc", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_live_disk_space_per_dc for Cassandra cluster: {cluster} to CSV file: {csv_file}')
 
-        logger.info(f'Processing get_average_coordinator_table_reads_per_second_per_keyspace for Cassandra cluster: {cluster}')
-        json_result = query.get_average_coordinator_table_reads_per_second_per_keyspace(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "average_coordinator_table_reads_per_second_per_keyspace", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_average_coordinator_table_reads_per_second_per_keyspace for Cassandra cluster: {cluster} to CSV file: {csv_file}')
-
-        logger.info(f'Processing get_total_coordinator_table_reads_per_dc for Cassandra cluster: {cluster}')
-        json_result = query.get_total_coordinator_table_reads_per_dc(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "total_coordinator_table_reads_per_dc", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_total_coordinator_table_reads_per_dc for Cassandra cluster: {cluster} to CSV file: {csv_file}')
-
-        logger.info(f'Processing get_total_coordinator_table_range_reads_per_dc for Cassandra cluster: {cluster}')
-        json_result = query.get_total_coordinator_table_range_reads_per_dc(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "total_coordinator_table_range_reads_per_dc", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_total_coordinator_table_range_reads_per_dc for Cassandra cluster: {cluster} to CSV file: {csv_file}')
-
-        logger.info(f'Processing get_total_coordinator_table_writes_per_dc for Cassandra cluster: {cluster}')
-        json_result = query.get_total_coordinator_table_writes_per_dc(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "total_coordinator_table_writes_per_dc", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_total_coordinator_table_writes_per_dc for Cassandra cluster: {cluster} to CSV file: {csv_file}')
-
-        logger.info(f'Processing get_write_counts for Cassandra cluster: {cluster}')
-        json_result = query.get_write_counts(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "write_counts", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_write_counts for Cassandra cluster: {cluster} to CSV file: {csv_file}')
-
-        logger.info(f'Processing get_read_counts for Cassandra cluster: {cluster}')
-        json_result = query.get_read_counts(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "read_counts", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_read_counts for Cassandra cluster: {cluster} to CSV file: {csv_file}')
-
-        logger.info(f'Processing get_read_scan_counts for Cassandra cluster: {cluster}')
-        json_result = query.get_read_scan_counts(cluster, start_datetime, end_datetime)
-        json_file = write_json_results_file(json_result, directory, "read_scan_counts", cluster)
-        csv_file = json_to_csv(json_file)
-        logger.info(f'Finished get_read_scan_counts for Cassandra cluster: {cluster} to CSV file: {csv_file}')
-
-    logger.info(f'Finished writing JSON results to {directory}')
+def __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, description, file_prefix):
+    logger.info(f'Processing {description} for Cassandra cluster: {cluster}')
+    json_result = query_function(cluster, start_datetime, end_datetime)
+    json_file = write_json_results_file(json_result, results_dir, file_prefix, cluster)
+    csv_file = json_to_csv(json_file)
+    logger.info(f'Finished {description} for Cassandra cluster: {cluster} to CSV file: {csv_file}')
 
 
 if __name__ == "__main__":
