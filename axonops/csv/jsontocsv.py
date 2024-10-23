@@ -59,7 +59,7 @@ def __rename_json_to_csv(file_path):
 
 def __load_and_validate_json(file_path):
     try:
-        logger.info(f"Loading JSON {file_path}")
+        logger.debug(f"Loading and validating JSON {file_path}")
         # Load JSON data from the file
         with open(file_path, 'r') as file:
             json_data = json.load(file)
@@ -74,7 +74,6 @@ def __load_and_validate_json(file_path):
         if 'result' not in json_data['data']:
             raise ValueError("The 'result' key is missing within 'data'.")
 
-        logger.info("Valid JSON structure with 'data' key found.")
         return json_data
 
     except FileNotFoundError:
