@@ -35,7 +35,7 @@ def write_json_results_file(json_result, directory, suffix, cluster_name, keyspa
         raise FileExistsError(f"The file {file_path} already exists.")
 
     # Write JSON data to the file
-    logger.info(f"Writing {file_path} with JSON {json_result}")
+    logger.info(f"Writing {file_path} with JSON")
     with open(file_path, 'w') as file:
         json.dump(json_result, file, indent=4)
 

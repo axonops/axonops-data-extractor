@@ -19,7 +19,7 @@ def json_to_csv(json_file):
     if 'data' in data and 'result' in data['data']:
         # Iterate over each metric result
         for result in data['data']['result']:
-            # Check if 'values' exist and skip if empty
+            # Skip metrics with no values
             if 'values' not in result or not result['values']:
                 continue
 
@@ -40,7 +40,7 @@ def json_to_csv(json_file):
     # Create a DataFrame from the list of dictionaries
     all_data_df = pd.DataFrame(all_data)
 
-    # Save DataFrame to CSV with proper quoting for fields containing commas
+    # Save DataFrame to CSV with proper quoting, excluding an index
     all_data_df.to_csv(csv_file, index=False, quotechar='"', quoting=csv.QUOTE_ALL)
 
     return csv_file
