@@ -71,6 +71,7 @@ def _execute_query(description, unit, axon_query, cluster_name, start_date, end_
     url = _generate_url(cluster_name, start_date, end_date, axon_query)
     logger.debug(f'Query {axon_query} API url generated for {cluster_name} -> {url}')
     result = _query_api(description, unit, axon_query, url, cluster_name, field_renames)
+    #logger.info(f"Result: {result}")
     logger.info(f'Query {axon_query} executed for {cluster_name}')
     return result
 
