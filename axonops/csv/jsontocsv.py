@@ -19,6 +19,10 @@ def json_to_csv(json_file):
     if 'data' in data and 'result' in data['data']:
         # Iterate over each metric result
         for result in data['data']['result']:
+            # Check if 'values' exist and skip if empty
+            if 'values' not in result or not result['values']:
+                continue
+
             # Extract all available metric information dynamically
             metric_info = result.get('metric', {})
 
