@@ -45,6 +45,8 @@ def _query_api(description, unit, axon_query, url, cluster_name, field_renames=N
 
         # Add description and unit to each metric
         for result in data['data']['result']:
+            result['metric']['axonops_org'] = org_id
+            result['metric']['cluster_name'] = cluster_name
             result['metric']['description'] = description
             result['metric']['unit'] = unit
             result['metric']['axonops_query'] = axon_query
@@ -133,4 +135,40 @@ def get_total_coordinator_table_writes_per_dc(cluster_name, start_date, end_date
     }
 
     axon_query = "sum(cas_Table_CoordinatorWriteLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)"
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
+
+
+def get_write_counts(cluster_name, start_date, end_date):
+    description = "Total Write Counts by node and table"
+    unit = "wps"
+
+    field_renames = {
+        "scope": "table",
+    }
+
+    axon_query = "cas_Table_CoordinatorWriteLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}"
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
+
+
+def get_read_counts(cluster_name, start_date, end_date):
+    description = "Total Read Counts by node and table"
+    unit = "wps"
+
+    field_renames = {
+        "scope": "table",
+    }
+
+    axon_query = "cas_Table_CoordinatorReadLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}"
+    return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
+
+
+def get_read_scan_counts(cluster_name, start_date, end_date):
+    description = "Total Read Scan Counts by node and table"
+    unit = "wps"
+
+    field_renames = {
+        "scope": "table",
+    }
+
+    axon_query = "cas_Table_CoordinatorScanLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}"
     return _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames)
