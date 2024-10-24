@@ -1,12 +1,13 @@
 import json
 import pandas as pd
 import csv
+import os
 from axonops.logger import setup_logger
 
 logger = setup_logger(__name__)
 
 
-def json_to_csv(json_file):
+def json_to_csv(json_file, deletejson: bool = True):
     # Load JSON data
     data = __load_and_validate_json(json_file)
 
@@ -42,6 +43,10 @@ def json_to_csv(json_file):
 
     # Save DataFrame to CSV with proper quoting, excluding an index
     all_data_df.to_csv(csv_file, index=False, quotechar='"', quoting=csv.QUOTE_ALL)
+
+    if deletejson:
+        os.remove(json_file)
+        logger.debug(f"JSON File '{json_file}' has been deleted.")
 
     return csv_file
 
