@@ -15,9 +15,19 @@ git clone https://github.com/axonops/axonops-csv-extractor.git
 cd axonops-csv-extractor
 ```
 
-
 ### **2. Generate your AxonOps API token for your organisation**
 
+Login to your AxonOps console, for the SaaS console go to http://console.axonops.com. Once you have logged in, choose the organisation you want to create an API token for. Then enter the API Tokens section:
+
+<img width="1076" alt="Screenshot 2024-10-24 at 13 16 07" src="https://github.com/user-attachments/assets/6533429a-892b-4a46-90d9-93b3617c5660">
+
+From there, click create a new API Token. Give the token a name, expiry period, select the clusters you want to be able to access with the token and select the Readonly Role
+
+<img width="602" alt="Screenshot 2024-10-24 at 13 18 16" src="https://github.com/user-attachments/assets/7cfc852e-5797-464d-afdf-7228d4b39dd4">
+
+Click the Generate button and then you can copy the API token generated to use in Step 3.
+
+<img width="604" alt="Screenshot 2024-10-24 at 13 20 00" src="https://github.com/user-attachments/assets/4632bd45-e444-46c9-b139-13aca0ec3924">
 
 
 ### **3. Set-up your AxonOps organisation and API tokens as environment variables**
