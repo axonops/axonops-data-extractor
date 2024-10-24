@@ -199,8 +199,8 @@ fabric.properties
 data/results/*
 !data/results/.gittouch
 
-data/reportconfig/*
-!data/reportconfig/report_config_example.json
+data/queryconfig/*
+!data/queryconfig/query_config_example.json
 
 # General
 .DS_Store

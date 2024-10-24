@@ -37,8 +37,8 @@ class QueryData:
         return f"QueryData(clusters={self.clusters}, queries={self.queries})"
 
 
-def load_report_config(file_path: str) -> QueryData:
-    logger.info(f"Loading report config from {file_path}")
+def load_query_config(file_path: str) -> QueryData:
+    logger.info(f"Loading query config from {file_path}")
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
@@ -81,5 +81,5 @@ def load_report_config(file_path: str) -> QueryData:
             field_renames=field_renames
         ))
 
-    logger.debug(f"Finished loading report config from {file_path}")
+    logger.debug(f"Finished loading query config from {file_path}")
     return QueryData(clusters=clusters, queries=queries)

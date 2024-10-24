@@ -2,7 +2,7 @@
 
 This is a Python application that AxonOps users can use to extract their data to CSV.
 
-You simply add your AxonOps API keys as environment variables, create a report config (see `data/reportconfig/report_config_example.json`) and then run `axonops_csv_extractor.py`.
+You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_csv_extractor.py`.
 
 **Note:** please ensure that there is sufficient disk space at the location you choose to output the CSV - they can be large.
 

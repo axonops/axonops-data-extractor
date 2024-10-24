@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from axonops.reportconfig import Rename
+from axonops.queryconfig import Rename
 from axonops.util.apiconfig import get_axonops_org_id, get_axonops_dash_url, get_headers
 from axonops.logger import setup_logger
 from urllib.parse import quote

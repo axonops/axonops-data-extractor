@@ -2,12 +2,12 @@ import axonops.metric.query as queryv2
 from axonops.csv.jsontocsv import json_to_csv
 from axonops.jsonresults import write_json_results_file, setup_results_directory
 from axonops.logger import setup_logger
-from axonops.reportconfig import load_report_config, Query
+from axonops.queryconfig import load_query_config, Query
 from axonops.util.time import datetime_to_unix
 
 logger = setup_logger(__name__)
 
-config_path = 'data/reportconfig/seagatelyve.json'
+config_path = 'data/queryconfig/seagatelyve.json'
 
 start_day = "2024-09-01"
 start_time = "00:00:00"
@@ -21,7 +21,7 @@ logger.debug(f"End date for report is {end_datetime}")
 
 
 def main():
-    query_data = load_report_config(config_path)
+    query_data = load_query_config(config_path)
     logger.info(f"Report config is loaded from: {config_path}")
     logger.debug(f"Query data: {query_data}")
 
