@@ -1,79 +1,96 @@
-# axonops-capacity-report
+# axonops-csv-extractor
 
-extrapolate=false&sampleResolution=5&bucketResolution=1&maxResult=2048
+This is a Python application that AxonOps users can use to extract their data to CSV for subsequent usage.
 
 
-## Ollama Setup
 
-Here are the instructions to download and install Ollama on macOS, Windows, and Linux, and then install and start using Llama 3.2:
+## Instructions
 
-### macOS
+### **1. Clone the Repository**
 
-1. **Download Ollama**:
-   - Visit the official Ollama website to download the macOS installer.
+First, clone the GitHub repository to your local machine:
 
-2. **Install Ollama**:
-   - Double-click the downloaded installer and follow the on-screen instructions to complete the installation.
+```bash
+git clone https://github.com/axonops/axonops-csv-extractor.git
+cd axonops-csv-extractor
+```
 
-3. **Verify Installation**:
-   - Open Terminal and type `ollama`. You should see a list of commands if installed correctly.
 
-4. **Install Llama 3.2 Model**:
-   - In Terminal, run:
-     ```bash
-     ollama pull llama3:8b
-     ```
+### **2. Generate your AxonOps API token for your organisation**
 
-5. **Start Using Llama 3.2**:
-   - Run the model with:
-     ```bash
-     ollama run llama3:8b
-     ```
 
-### Windows
 
-1. **Download Ollama**:
-   - Visit the official Ollama website and download the Windows installer.
+### **3. Set-up your AxonOps organisation and API tokens as environment variables**
 
-2. **Install Ollama**:
-   - Locate the downloaded file, double-click it, and follow the installation instructions.
+To interact with the AxonOps APIs you need to store your organisation and API key as environment variables or add a `.env` to the root directory of the repo. 
 
-3. **Verify Installation**:
-   - Open Command Prompt and type `ollama`. You should see a list of commands if installed correctly.
+See `.env-example` - copy this to a file called `.env` and update it. This file is in .gitignore and will not be committed.
 
-4. **Install Llama 3.2 Model**:
-   - In Command Prompt, execute:
-     ```bash
-     ollama pull llama3:8b
-     ```
+```bash
+AXONOPS_ORG_ID="youraxonopsorg"
+AXONOPS_API_SECRET_TOKEN="yourapitoken"
+```
 
-5. **Start Using Llama 3.2**:
-   - Run the model with:
-     ```bash
-     ollama run llama3:8b
-     ```
+### **4. Set Up a Python Virtual Environment**
 
-### Linux
+Create a virtual environment in the project directory using `.venv` as the directory name. This ensures that all Python dependencies are installed in an isolated environment specific to this project:
 
-1. **Download and Install Ollama**:
-   - Open Terminal and run:
-     ```bash
-     curl -fsSL https://ollama.com/install.sh | sh
-     ```
+```bash
+python3 -m venv .venv
+```
 
-2. **Verify Installation**:
-   - In Terminal, type `ollama` to confirm installation by checking for available commands.
+This command creates a directory named `.venv` inside your project directory, which contains the virtual environment.
 
-3. **Install Llama 3.2 Model**:
-   - Execute in Terminal:
-     ```bash
-     ollama pull llama3:8b
-     ```
+### **5. Activate the Virtual Environment**
 
-4. **Start Using Llama 3.2**:
-   - Run the model with:
-     ```bash
-     ollama run llama3:8b
-     ```
+Activate the virtual environment to start using it. The activation command depends on your operating system:
 
-These steps will help you set up and interact with Llama 3.2 using Ollama from this python app
+- **On macOS and Linux:**
+
+  ```bash
+  source .venv/bin/activate
+  ```
+
+- **On Windows (Command Prompt):**
+
+  ```cmd
+  .venv\Scripts\activate.bat
+  ```
+
+- **On Windows (PowerShell):**
+
+  ```powershell
+  .venv\Scripts\Activate.ps1
+  ```
+
+Once activated, your terminal prompt should change to indicate that you are working within the virtual environment.
+
+### **6. Install Required Packages**
+
+With the virtual environment activated, install all necessary packages listed in `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
+This command reads the `requirements.txt` file and installs all specified packages into the virtual environment.
+
+### **7. Run the Python Script**
+
+Now that all dependencies are installed, you can run your Python script:
+
+```bash
+python <script-name>.py
+```
+
+Replace `<script-name>` with the name of your Python script file.
+
+### **8. Deactivate the Virtual Environment**
+
+Once you are done working, deactivate the virtual environment to return to your system's default Python environment:
+
+```bash
+deactivate
+```
+
+These steps ensure that your project's dependencies are managed separately from other projects and avoid conflicts between package versions.
