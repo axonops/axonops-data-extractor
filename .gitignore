@@ -94,6 +94,7 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+.pyvenv/
 
 # Spyder project settings
 .spyderproject
@@ -197,6 +198,8 @@ fabric.properties
 
 data/results/*
 !data/results/.gittouch
+
+data/reportconfig/*
 !data/reportconfig/report_config_example.json
 
 # General

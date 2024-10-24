@@ -32,7 +32,7 @@ Click the Generate button and then you can copy the API token generated to use i
 
 ### **3. Set-up your AxonOps organisation and API tokens as environment variables**
 
-To interact with the AxonOps APIs you need to store your organisation and API key as environment variables or add a `.env` to the root directory of the repo. 
+To interact with the AxonOps APIs you need to store your organisation and API key as environment variables in a new `.env` you need to create in the root directory of the repo. 
 
 See `.env-example` - copy this to a file called `.env` and update it. This file is in .gitignore and will not be committed.
 
@@ -40,6 +40,7 @@ See `.env-example` - copy this to a file called `.env` and update it. This file 
 AXONOPS_ORG_ID="youraxonopsorg"
 AXONOPS_API_SECRET_TOKEN="yourapitoken"
 ```
+For self-hosted AxonOps users you can also add a `AXONOPS_DASH_URL` variable to point at your own installation of AxonOps.
 
 ### **4. Set Up a Python Virtual Environment**
 

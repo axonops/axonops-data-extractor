@@ -4,3 +4,4 @@ python-dotenv
 cloudscraper
 pytz
 pandas
+python-dotenv

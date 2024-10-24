@@ -7,7 +7,7 @@ from axonops.util.time import datetime_to_unix
 
 logger = setup_logger(__name__)
 
-config_path = 'data/reportconfig/monthly_query.json'
+config_path = 'data/reportconfig/seagatelyve.json'
 
 start_day = "2024-09-01"
 start_time = "00:00:00"
