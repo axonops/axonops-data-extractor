@@ -1,14 +1,9 @@
-import axonops.metric.query as query
-from axonops.logger import setup_logger
-from axonops.jsonresults import write_json_results_file, setup_results_directory
-from axonops.reportconfig import load_report_config
-from axonops.util.apiconfig import get_axonops_org_cassandra_clusters
-from axonops.util.time import datetime_to_unix
+import axonops.metric.queryv2 as queryv2
 from axonops.csv.jsontocsv import json_to_csv
-import time
-import json
-from typing import List, Optional
-
+from axonops.jsonresults import write_json_results_file, setup_results_directory
+from axonops.logger import setup_logger
+from axonops.reportconfig import load_report_config, Query
+from axonops.util.time import datetime_to_unix
 
 logger = setup_logger(__name__)
 
@@ -36,51 +31,25 @@ def main():
     # Iterate over the list of clusters and download the metrics
     for cluster in query_data.clusters:
         logger.info(f'Starting downloading metrics for Cassandra cluster: {cluster}')
-        # Process each query using the helper function
-        # for query_function, file_prefix in queries:
-        #     __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, file_prefix)
+        for q in query_data.queries:
+            __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, q)
 
     logger.info(f'Finished writing JSON results to {results_dir}')
 
-# def __load_queries_from_config(config_file):
-#     with open(config_file, 'r') as file:
-#         config = json.load(file)
-#
-#     queries = []
-#     for item in config['queries']:
-#         function_name = item['function']
-#         file_prefix = item['file_prefix']
-#
-#         # Dynamically get the function from the query module
-#         query_function = getattr(query, function_name)
-#
-#         queries.append((query_function, file_prefix))
-#
-#     return queries
-#
-# def __process_cluster_data(results_dir, cluster, start_datetime, end_datetime, query_function, file_prefix):
-#     json_result = query_function(cluster, start_datetime, end_datetime)
-#     json_file = write_json_results_file(json_result, results_dir, file_prefix, cluster)
-#     logger.debug(f'JSON results written to: {json_file}')
-#     csv_file = json_to_csv(json_file)
-#     logger.info(f'Generated CSV: {csv_file}')
-#
-#
-# def __load_queries_from_config(config_file):
-#     with open(config_file, 'r') as file:
-#         config = json.load(file)
-#
-#     queries = []
-#     for item in config['queries']:
-#         function_name = item['function']
-#         file_prefix = item['file_prefix']
-#
-#         # Dynamically get the function from the query module
-#         query_function = getattr(query, function_name)
-#
-#         queries.append((query_function, file_prefix))
-#
-#     return queries
+
+def __process_cluster_data(results_dir, cluster_name, start_date, end_date, query_config: Query):
+    description = query_config.description
+    unit = query_config.unit
+    axon_query = query_config.axon_query
+    file_prefix = query_config.file_prefix
+    field_renames = query_config.field_renames
+
+    json_result = queryv2.query_api(description, unit, axon_query, start_date, end_date, cluster_name, field_renames)
+
+    json_file = write_json_results_file(json_result, results_dir, file_prefix, cluster_name)
+    logger.debug(f'JSON results written to: {json_file}')
+    csv_file = json_to_csv(json_file)
+    logger.info(f'Generated CSV: {csv_file}')
 
 
 if __name__ == "__main__":

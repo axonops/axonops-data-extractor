@@ -1,3 +1,6 @@
+from typing import Optional, List
+
+from axonops.reportconfig import Rename
 from axonops.util.apiconfig import get_axonops_org_id, get_axonops_dash_url, get_headers
 from axonops.logger import setup_logger
 from urllib.parse import quote
@@ -35,7 +38,7 @@ def _generate_url(cluster_name, start_date, end_date, query):
     return url
 
 
-def query_api(description, unit, axon_query, file_prefix, start_date, end_date, cluster_name, field_renames=None):
+def query_api(description, unit, axon_query, start_date, end_date, cluster_name, field_renames: Optional[List[Rename]] = None):
     try:
         url = _generate_url(cluster_name, start_date, end_date, axon_query)
         # Make the GET request with headers
@@ -58,11 +61,12 @@ def query_api(description, unit, axon_query, file_prefix, start_date, end_date, 
             result['metric']['unit'] = unit
             result['metric']['axonops_query'] = axon_query
 
-            # Rename fields based on field_renames dictionary
             if field_renames:
-                for old_field, new_field in field_renames.items():
-                    if old_field in result['metric']:
-                        result['metric'][new_field] = result['metric'].pop(old_field)
+                for r in field_renames:
+                    old_name = r.rename
+                    new_name = r.value
+                    if old_name in result['metric']:
+                        result['metric'][old_name] = result['metric'].pop(new_name)
 
         return data
 
