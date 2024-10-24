@@ -30,6 +30,21 @@ python axonops_csv_extractor.py --outputdir data/results/mydata --queryconfig da
 
 This will extract all the data for September 2024 returned by the queries in myqueries.json and store it as CSV files in data/results/mydata
 
+# Table of Contents
+- [Setup Instructions](#setup-instructions)
+  - [Query Configuration Setup](#query-configuration-setup)
+    - [JSON Field Information](#json-field-information)
+  - [Python3 Setup and AxonOps API Key](#python3-setup-and-axonops-api-key)
+    1. [Clone the Repository](#1-clone-the-repository)
+    2. [Generate an AxonOps API token for your organisation](#2-generate-an-axonops-api-token-for-your-organisation)
+    3. [Set-up your AxonOps organisation and API tokens as environment variables](#3-set-up-your-axonops-organisation-and-api-tokens-as-environment-variables)
+    4. [Set Up a Python Virtual Environment](#4-set-up-a-python-virtual-environment)
+    5. [Activate the Virtual Environment](#5-activate-the-virtual-environment)
+    6. [Install Required Python Packages](#6-install-required-python-packages)
+    7. [Run the Python Script](#7-run-the-python-script)
+    8. [Deactivate the Virtual Environment](#8-deactivate-the-virtual-environment)
+
+
 ## Setup Instructions
 
 ### Query Configuration Setup
