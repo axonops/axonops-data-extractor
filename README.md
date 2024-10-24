@@ -4,11 +4,67 @@ This is a Python application that AxonOps users can use to extract their data to
 
 You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_csv_extractor.py`.
 
+To get it working, load the `requirements.txt` into your Python environment and then run the Python script `axonops_csv_extractor.py`
+```
+usage: axonops_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
+
+AxonOps CSV Extractor
+
+options:
+  -h, --help            show this help message and exit
+  -o OUTPUTDIR, --outputdir OUTPUTDIR
+                        The file path to a directory for outputting the CSV data.
+  -q QUERYCONFIG, --queryconfig QUERYCONFIG
+                        File path to the JSON configuration file listing the queries to run and extract to CSV. See the README.md for more information on this configuration file.
+  -m MONTHOFYEAR, --monthofyear MONTHOFYEAR
+                        The month of year in format YYYYMM for which data will be extracted to CSV. This can not be in the future nor the current month
+  -d, --deletejson      If set, the downloaded JSON will be kept in the output directory. By default it is automatically deleted after being converted to CSV.
+```
+
+
 **Note:** please ensure that there is sufficient disk space at the location you choose to output the CSV - they can be large.
 
 ## Instructions
 
-To run the extractor you must setup your Python environment and API keys to access AxonOps.
+### Query Configuration Setup
+
+The `--queryconfig` argument should be pointing at a JSON file the defines the queries to run, the results of which will be converted to CSV. There is an example you can see in `data/queryconfig`.
+
+The file looks like this
+
+```JSON
+{
+    "clusters": ["mycassandracluster1","mycassandracluster2","mycassandracluster3"],
+    "queries": [
+        {
+            "description": "Live Disk Space Used by DC and Keyspace",
+            "unit": "bytes (SI)",
+            "axon_query": "sum(cas_Table_LiveDiskSpaceUsed{function='Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces',scope!=''}) by (dc, keyspace)",
+            "file_prefix": "live_disk_per_keyspace"
+        },
+        {
+            "description": "Total Coordinator Reads by DC and Keyspace",
+            "unit": "rps",
+            "axon_query": "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)",
+            "file_prefix": "total_coordinator_table_reads_per_dc",
+            "field_renames": [
+                {"rename": "scope", "value": "table"}
+            ]
+        }
+    ]
+}
+```
+
+#### JSON Field Information
+
+* ***clusters***: Add the names of your clusters connected to AxonOps in the `clusters` list.
+* ***queries***: For each of the clusters in entered, this is the list of queries that will be run and the results converted to CSV.
+  *  ***description***: A human readable description of the query
+  *  ***unit***: the unit returned
+  *  ***axon_query***: the AxonOps query to run the results of which will be converted to CSV.
+  *  ***file_prefix***: The file prefix that will be used in the name of the CSV
+  *  ***field_renames***: (optional) Sometimes, the JSON API response has fields returned that can be named better. 
+
 
 ### Python3 Setup and AxonOps API Key
 
@@ -104,6 +160,24 @@ Now that all dependencies are installed, you can run the main Python script:
 ```bash
 python axonops_cav_extractor.py ....
 ```
+
+Usage:
+```bash
+usage: axonops_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
+
+AxonOps CSV Extractor
+
+options:
+  -h, --help            show this help message and exit
+  -o OUTPUTDIR, --outputdir OUTPUTDIR
+                        The file path to a directory for outputting the CSV data.
+  -q QUERYCONFIG, --queryconfig QUERYCONFIG
+                        File path to the JSON configuration file listing the queries to run and extract to CSV. See the README.md for more information on this configuration file.
+  -m MONTHOFYEAR, --monthofyear MONTHOFYEAR
+                        The month of year in format YYYYMM for which data will be extracted to CSV. This can not be in the future nor the current month
+  -d, --deletejson      If set, the downloaded JSON will be kept in the output directory. By default it is automatically deleted after being converted to CSV.
+```
+
 
 #### **8. Deactivate the Virtual Environment**
 

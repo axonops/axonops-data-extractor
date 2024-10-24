@@ -19,7 +19,7 @@
             "axon_query": "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (keyspace)",
             "file_prefix": "average_coordinator_table_reads_per_second_per_keyspace"
         },
-                {
+        {
             "description": "Total Coordinator Reads by DC and Keyspace",
             "unit": "rps",
             "axon_query": "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)",
