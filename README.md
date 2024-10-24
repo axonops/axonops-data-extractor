@@ -4,7 +4,7 @@ The AxonOps CSV Extractor is a Python utility designed to extract data from Axon
 
 You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_csv_extractor.py`.
 
-To get it working, load the `requirements.txt` into your Python environment and then run the Python script `axonops_csv_extractor.py`
+To get it working, load the Python dependencies in `requirements.txt` into your Python environment and then run the Python script `axonops_csv_extractor.py`
 ```
 usage: axonops_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
 
