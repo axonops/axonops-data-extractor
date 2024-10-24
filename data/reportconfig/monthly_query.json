@@ -1,0 +1,21 @@
+{
+    "clusters": ["global1"],
+    "queries": [
+        {
+            "description": "Live Disk Space Used by DC and Keyspace",
+            "unit": "bytes (SI)",
+            "axon_query": "sum(cas_Table_LiveDiskSpaceUsed{function='Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces',scope!=''}) by (dc, keyspace)",
+            "file_prefix": "live_disk_per_keyspace"
+        },
+        {
+            "description": "Total Coordinator Range Reads by DC and Keyspace",
+            "unit": "rps",
+            "axon_query": "sum(cas_Table_CoordinatorScanLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)",
+            "file_prefix": "total_coordinator_table_range_reads_per_dc",
+            "field_renames": [
+                {"rename": "scope", "value": "table"},
+                {"rename": "some", "value": "thing"}
+            ]
+        }
+    ]
+}
