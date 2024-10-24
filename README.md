@@ -20,11 +20,15 @@ options:
                         The month of year in format YYYYMM for which data will be extracted to CSV. This can not be in the future nor the current month
   -d, --deletejson      If set, the downloaded JSON will be kept in the output directory. By default it is automatically deleted after being converted to CSV.
 ```
-
-
 **Note:** please ensure that there is sufficient disk space at the location you choose to output the CSV - they can be large.
 
-## Instructions
+
+For example
+```bash
+python axonops_csv_extractor.py --outputdir data/results/mydata --queryconfig data/queryconfig/myqueries.json --monthofyear 202409
+```
+
+## Setup Instructions
 
 ### Query Configuration Setup
 

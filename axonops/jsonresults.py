@@ -11,9 +11,8 @@ logger = setup_logger(__name__)
 org_id = get_axonops_org_id()
 
 
-def setup_results_directory(base_directory, yyyymm):
-    today = datetime.datetime.now()
-    directory_name = f'{yyyymm}-{uuid.uuid4()}'
+def setup_results_directory(base_directory, querymonth):
+    directory_name = f'{querymonth}-{uuid.uuid4()}'
     new_directory_path = os.path.join(base_directory, directory_name)
 
     os.makedirs(new_directory_path, exist_ok=True)

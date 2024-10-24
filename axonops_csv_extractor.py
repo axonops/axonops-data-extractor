@@ -48,9 +48,9 @@ def parse_arguments():
     args = parser.parse_args()
 
     # Unpack monthofyear into two separate variables
-    start_timestamp, end_timestamp = args.monthofyear
+    start_timestamp, end_timestamp, querymonth = args.monthofyear
 
-    return args.outputdir, args.queryconfig, start_timestamp, end_timestamp, args.deletejson
+    return args.outputdir, args.queryconfig, start_timestamp, end_timestamp, querymonth, args.deletejson
 
 
 def __process_cluster_data(results_dir, cluster_name, start_date, end_date, query_config: Query,
@@ -107,24 +107,27 @@ def validate_month_of_year(value):
     next_month = (date.replace(day=28) + datetime.timedelta(days=4)).replace(day=1)
     start_of_next_month = int(time.mktime(next_month.timetuple()))
 
-    return start_of_month, start_of_next_month
+    querymonth = int(value)
+
+    return start_of_month, start_of_next_month, querymonth
 
 def main():
     # Parse arguments first
-    outputdir, queryconfig, start_timestamp, end_timestamp, deletejson = parse_arguments()
+    outputdir, queryconfig, start_timestamp, end_timestamp, querymonth, deletejson = parse_arguments()
 
     # Now you can use these variables for your application logic
-    logger.info(f"Output Directory: {outputdir}")
-    logger.info(f"Query Config: {queryconfig}")
-    logger.info(f"Start Timestamp: {start_timestamp}")
-    logger.info(f"End Timestamp: {end_timestamp}")
-    logger.info(f"Delete JSON: {deletejson}")
+    logger.debug(f"Output Directory: {outputdir}")
+    logger.debug(f"Query Config: {queryconfig}")
+    logger.debug(f"Start Unix Timestamp: {start_timestamp}")
+    logger.debug(f"End Unix Timestamp: {end_timestamp}")
+    logger.debug(f"Query Month: {querymonth}")
+    logger.debug(f"Delete JSON: {deletejson}")
 
     query_data = load_query_config(queryconfig)
     logger.info(f"Query config is loaded from: {queryconfig}")
     logger.debug(f"Query data: {query_data}")
 
-    results_dir = setup_results_directory(outputdir)
+    results_dir = setup_results_directory(outputdir, querymonth)
     logger.info(f"CSV output directory setup completed: {results_dir}")
 
     # Iterate over the list of clusters and download the metrics
