@@ -1,0 +1,77 @@
+{
+    "clusters": ["mycassandracluster1","mycassandracluster2","mycassandracluster3"],
+    "queries": [
+        {
+            "description": "Live Disk Space Used by DC and Keyspace",
+            "unit": "bytes (SI)",
+            "axon_query": "sum(cas_Table_LiveDiskSpaceUsed{function='Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces',scope!=''}) by (dc, keyspace)",
+            "file_prefix": "live_disk_per_keyspace"
+        },
+        {
+            "description": "Live Disk Space Used by DC",
+            "unit": "bytes (SI)",
+            "axon_query": "sum(cas_Table_LiveDiskSpaceUsed{function='Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces',scope!=''}) by (dc)",
+            "file_prefix": "live_disk_space_per_dc"
+        },
+        {
+            "description": "Average Coordinator reads by Keyspace",
+            "unit": "rps",
+            "axon_query": "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (keyspace)",
+            "file_prefix": "average_coordinator_table_reads_per_second_per_keyspace"
+        },
+                {
+            "description": "Total Coordinator Reads by DC and Keyspace",
+            "unit": "rps",
+            "axon_query": "sum(cas_Table_CoordinatorReadLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)",
+            "file_prefix": "total_coordinator_table_reads_per_dc",
+            "field_renames": [
+                {"rename": "scope", "value": "table"}
+            ]
+        },
+        {
+            "description": "Total Coordinator Range Reads by DC and Keyspace",
+            "unit": "rps",
+            "axon_query": "sum(cas_Table_CoordinatorScanLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)",
+            "file_prefix": "total_coordinator_table_range_reads_per_dc",
+            "field_renames": [
+                {"rename": "scope", "value": "table"}
+            ]
+        },
+        {
+            "description": "Total Coordinator Writes by DC and Keyspace",
+            "unit": "wps",
+            "axon_query": "sum(cas_Table_CoordinatorWriteLatency{axonfunction='rate',function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}) by (dc,keyspace,scope)",
+            "file_prefix": "total_coordinator_table_writes_per_dc",
+            "field_renames": [
+                {"rename": "scope", "value": "table"}
+            ]
+        },
+        {
+            "description": "Total Coordinator Write Counts by Node and table",
+            "unit": "wps",
+            "axon_query": "cas_Table_CoordinatorWriteLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}",
+            "file_prefix": "coordinator_write_counts",
+            "field_renames": [
+                {"rename": "scope", "value": "table"}
+            ]
+        },
+        {
+            "description": "Total Coordinator Read Counts by Node and table",
+            "unit": "rps",
+            "axon_query": "cas_Table_CoordinatorReadLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}",
+            "file_prefix": "coordinator_read_counts",
+            "field_renames": [
+                {"rename": "scope", "value": "table"}
+            ]
+        },
+        {
+            "description": "Total Coordinator Read Scan Counts by Node and table",
+            "unit": "rps",
+            "axon_query": "cas_Table_CoordinatorReadLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}",
+            "file_prefix": "coordinator_range_read_counts",
+            "field_renames": [
+                {"rename": "scope", "value": "table"}
+            ]
+        }
+    ]
+}
