@@ -12,36 +12,6 @@ import time
 logger = setup_logger(__name__)
 
 
-def main():
-    outputdir, queryconfig, start_timestamp, end_timestamp, deletejson = parse_arguments()
-
-    # Now you can use these variables for your application logic
-    logger.info(f"Output Directory: {outputdir}")
-    logger.info(f"Query Config: {queryconfig}")
-    logger.info(f"Start Timestamp: {start_timestamp}")
-    logger.info(f"End Timestamp: {end_timestamp}")
-    logger.info(f"Delete JSON: {deletejson}")
-
-    query_data = load_query_config(queryconfig)
-    logger.info(f"Query config is loaded from: {queryconfig}")
-    logger.debug(f"Query data: {query_data}")
-
-    results_dir = setup_results_directory(outputdir)
-    logger.info(f"CSV output directory setup completed: {results_dir}")
-
-    # Iterate over the list of clusters and download the metrics
-    for cluster in query_data.clusters:
-        logger.info(f'Starting downloading metrics for Cassandra cluster: {cluster}')
-        for q in query_data.queries:
-            __process_cluster_data(results_dir, cluster, start_timestamp, end_timestamp, q)
-
-    logger.info(f'Finished writing JSON results to {results_dir}')
-
-
-if __name__ == "__main__":
-    main()
-
-
 def parse_arguments():
     """Parse and validate command line arguments."""
     parser = argparse.ArgumentParser(description="AxonOps CSV Extractor")
@@ -138,3 +108,33 @@ def validate_month_of_year(value):
     start_of_next_month = int(time.mktime(next_month.timetuple()))
 
     return start_of_month, start_of_next_month
+
+def main():
+    # Parse arguments first
+    outputdir, queryconfig, start_timestamp, end_timestamp, deletejson = parse_arguments()
+
+    # Now you can use these variables for your application logic
+    logger.info(f"Output Directory: {outputdir}")
+    logger.info(f"Query Config: {queryconfig}")
+    logger.info(f"Start Timestamp: {start_timestamp}")
+    logger.info(f"End Timestamp: {end_timestamp}")
+    logger.info(f"Delete JSON: {deletejson}")
+
+    query_data = load_query_config(queryconfig)
+    logger.info(f"Query config is loaded from: {queryconfig}")
+    logger.debug(f"Query data: {query_data}")
+
+    results_dir = setup_results_directory(outputdir)
+    logger.info(f"CSV output directory setup completed: {results_dir}")
+
+    # Iterate over the list of clusters and download the metrics
+    for cluster in query_data.clusters:
+        logger.info(f'Starting downloading metrics for Cassandra cluster: {cluster}')
+        for q in query_data.queries:
+            __process_cluster_data(results_dir, cluster, start_timestamp, end_timestamp, q)
+
+    logger.info(f'Finished writing JSON results to {results_dir}')
+
+
+if __name__ == "__main__":
+    main()
