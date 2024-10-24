@@ -1,5 +1,5 @@
 {
-    "clusters": ["global1"],
+    "clusters": ["mycassandracluster1","mycassandracluster2","mycassandracluster3"],
     "queries": [
         {
             "description": "Live Disk Space Used by DC and Keyspace",
@@ -68,7 +68,7 @@
             "description": "Total Coordinator Read Scan Counts by Node and table",
             "unit": "rps",
             "axon_query": "cas_Table_CoordinatorReadLatency{function=~'Count',keyspace!~'system|system_auth|system_distributed|system_schema|system_traces'}",
-            "file_prefix": "coordinator_read_counts",
+            "file_prefix": "coordinator_range_read_counts",
             "field_renames": [
                 {"rename": "scope", "value": "table"}
             ]
