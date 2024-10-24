@@ -39,6 +39,7 @@ def _generate_url(cluster_name, start_date, end_date, query):
 
 
 def query_api(description, unit, axon_query, start_date, end_date, cluster_name, field_renames: Optional[List[Rename]] = None):
+    url = None
     try:
         url = _generate_url(cluster_name, start_date, end_date, axon_query)
         # Make the GET request with headers
@@ -66,7 +67,7 @@ def query_api(description, unit, axon_query, start_date, end_date, cluster_name,
                     old_name = r.rename
                     new_name = r.value
                     if old_name in result['metric']:
-                        result['metric'][old_name] = result['metric'].pop(new_name)
+                        result['metric'][new_name] = result['metric'].pop(old_name)
 
         return data
 
