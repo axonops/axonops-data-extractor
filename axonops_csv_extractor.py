@@ -1,4 +1,4 @@
-import axonops.metric.queryv2 as queryv2
+import axonops.metric.query as queryv2
 from axonops.csv.jsontocsv import json_to_csv
 from axonops.jsonresults import write_json_results_file, setup_results_directory
 from axonops.logger import setup_logger
