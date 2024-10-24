@@ -1,6 +1,6 @@
 # AxonOps™ CSV Extractor
 
-This is a Python application that AxonOps users can use to extract their cluster metrics to CSV.
+The AxonOps CSV Extractor is a Python utility designed to extract data from AxonOps and concert it to CSV files. This tool is particularly useful for integrating into data pipelines, data warehouses or ETL workflows
 
 You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_csv_extractor.py`.
 
@@ -179,7 +179,7 @@ This command reads the `requirements.txt` file and installs all specified packag
 Now that all dependencies are installed, you can run the main Python script:
 
 ```bash
-python axonops_csv_extractor.py ....
+python axonops_csv_extractor.py [options]
 ```
 
 Usage:
