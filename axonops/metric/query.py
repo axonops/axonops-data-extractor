@@ -66,9 +66,8 @@ def query_api(description, unit, axon_query, start_date, end_date, cluster_name,
         status_code = response.status_code
         logger.info(f'{cluster_name} - HTTP Code {status_code} - {duration_ms} ms time taken for API request to {url}')
         # Log the HTTP response headers
-        logger.info(f'{cluster_name} - HTTP Response Headers: {response.headers}')
+        logger.debug(f'{cluster_name} - HTTP Response Headers: {response.headers}')
         data = response.json()
-        #logger.info(f"Paylod {data}")
 
 
         # Add description and unit to each metric
