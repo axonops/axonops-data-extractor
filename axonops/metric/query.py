@@ -63,9 +63,13 @@ def query_api(description, unit, axon_query, start_date, end_date, cluster_name,
         end_time = time.time()  # Record the end time
         # Calculate the duration in milliseconds and log it
         duration_ms = math.ceil((end_time - start_time) * 1000)
-        logger.info(f'{duration_ms} ms time taken for API request to {url}')
-
+        status_code = response.status_code
+        logger.info(f'{cluster_name} - HTTP Code {status_code} - {duration_ms} ms time taken for API request to {url}')
+        # Log the HTTP response headers
+        logger.info(f'{cluster_name} - HTTP Response Headers: {response.headers}')
         data = response.json()
+        #logger.info(f"Paylod {data}")
+
 
         # Add description and unit to each metric
         for result in data['data']['result']:
@@ -85,14 +89,14 @@ def query_api(description, unit, axon_query, start_date, end_date, cluster_name,
         return data
 
     except requests.exceptions.HTTPError as http_err:
-        logger.error(f"HTTP error occurred: {http_err} for URL {url}")
-        raise RuntimeError(f"HTTP error occurred: {http_err} for URL {url}") from http_err
+        logger.error(f"{cluster_name} - HTTP error occurred: {http_err} for URL {url}")
+        raise RuntimeError(f"{cluster_name} - HTTP error occurred: {http_err} for URL {url}") from http_err
     except requests.exceptions.RequestException as err:
-        logger.error(f"An requests error occurred: {err} for URL {url}")
-        raise RuntimeError(f"An error occurred: {err} for URL {url}") from err
+        logger.error(f"{cluster_name} - A requests error occurred: {err} for URL {url}")
+        raise RuntimeError(f"{cluster_name} - An error occurred: {err} for URL {url}") from err
     except ValueError as json_err:
-        logger.error(f"JSON decode error: {json_err} for URL {url}")
-        raise RuntimeError(f"JSON decode error: {json_err} for URL {url}") from json_err
+        logger.error(f"{cluster_name} - JSON decode error: {json_err} for URL {url}")
+        raise RuntimeError(f"{cluster_name} - JSON decode error: {json_err} for URL {url}") from json_err
 
 
 def _execute_query(description, unit, axon_query, cluster_name, start_date, end_date, field_renames=None):

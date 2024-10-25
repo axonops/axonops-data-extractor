@@ -1,26 +1,22 @@
 #  © 2024 AxonOps Limited. All rights reserved.
-
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
-
 #      http://www.apache.org/licenses/LICENSE-2.0
-
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS,
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import axonops.metric.query as query
+import argparse
+import datetime
+import os
+import time
 from axonops.csv.jsontocsv import json_to_csv
 from axonops.jsonresults import write_json_results_file, setup_results_directory
 from axonops.logger import setup_logger
 from axonops.queryconfig import load_query_config, Query
-from axonops.util.time import datetime_to_unix
-import argparse
-import os
-import datetime
-import time
 
 logger = setup_logger(__name__)
 
@@ -71,15 +67,16 @@ def __process_cluster_data(results_dir, cluster_name, start_date, end_date, quer
     description = query_config.description
     unit = query_config.unit
     axon_query = query_config.axon_query
+    logger.info(f"{cluster_name} - About to run AxonQuery {axon_query}")
     file_prefix = query_config.file_prefix
     field_renames = query_config.field_renames
 
     json_result = query.query_api(description, unit, axon_query, start_date, end_date, cluster_name, field_renames)
 
     json_file = write_json_results_file(json_result, results_dir, file_prefix, cluster_name)
-    logger.debug(f'JSON results written to: {json_file}')
+    logger.debug(f'{cluster_name} - JSON results written to: {json_file}')
     csv_file = json_to_csv(json_file, deletejson)
-    logger.info(f'Generated CSV: {csv_file}')
+    logger.info(f'{cluster_name} - Generated CSV: {csv_file}')
 
 
 def validate_output_dir(path):
