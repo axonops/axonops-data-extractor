@@ -73,10 +73,10 @@ def __process_cluster_data(results_dir, cluster_name, start_date, end_date, quer
 
     json_result = query.query_api(description, unit, axon_query, start_date, end_date, cluster_name, field_renames)
 
-    # json_file = write_json_results_file(json_result, results_dir, file_prefix, cluster_name)
-    # logger.debug(f'{cluster_name} - JSON results written to: {json_file}')
-    # csv_file = json_to_csv(json_file, deletejson)
-    # logger.info(f'{cluster_name} - Generated CSV: {csv_file}')
+    json_file = write_json_results_file(json_result, results_dir, file_prefix, cluster_name)
+    logger.debug(f'{cluster_name} - JSON results written to: {json_file}')
+    csv_file = json_to_csv(json_file, deletejson)
+    logger.info(f'{cluster_name} - Generated CSV: {csv_file}')
 
 
 def validate_output_dir(path):
