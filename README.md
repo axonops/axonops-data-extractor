@@ -29,11 +29,12 @@ python axonops_csv_extractor.py --outputdir data/results/mydata --queryconfig da
 ```
 
 This will extract all the data for September 2024 returned by the queries in myqueries.json and store it as CSV files in data/results/mydata
-
+https://github.com/axonops/axonops-csv-extractor/edit/main/README.md#how-to-find-values-for-axon_query
 ***
 - [Setup Instructions](#setup-instructions)
   - [Query Configuration Setup](#query-configuration-setup)
     - [JSON Field Information](#json-field-information)
+    - [How to find values for `axon_query`](#how-to-find-values-for-axon_query)
   - [Python3 Setup and AxonOps API Key](#python3-setup-and-axonops-api-key)
     * [Clone the Repository](#1-clone-the-repository)
     * [Generate an AxonOps API token for your organisation](#2-generate-an-axonops-api-token-for-your-organisation)
@@ -75,7 +76,6 @@ The file looks roughly like this:
     ]
 }
 ```
-
 #### JSON Field Information
 
 * ***clusters***: Add the names of your clusters connected to AxonOps in the `clusters` list.
@@ -84,8 +84,31 @@ The file looks roughly like this:
   *  ***unit***: the unit returned
   *  ***axon_query***: the AxonOps query to run the results of which will be converted to CSV.
   *  ***file_prefix***: The file prefix that will be used in the name of the CSV. This must be unique.
-  *  ***field_renames***: (optional) Sometimes, the JSON API response has fields returned that can be named better. 
+  *  ***field_renames***: (optional) Sometimes, the JSON API response has fields returned that can be named better.
 
+### How to find values for `axon_query`
+
+In AxonOps we using a query language that is very similar to PromQL to query for retrieving metrics.
+
+If there is a metric you want to extract to CSV, navigate to the dashboard it is on:
+
+<img width="608" alt="Screenshot 2024-10-25 at 10 26 40" src="https://github.com/user-attachments/assets/75b61e81-9192-4019-9b8d-a1aa6328d42c">
+
+Then edit the graph containing the metric you want to extract:
+
+<img width="675" alt="Screenshot 2024-10-25 at 10 31 47" src="https://github.com/user-attachments/assets/465ad98f-87e0-4023-bfa7-096267572ba0">
+
+One in the edit window, click on `VISUALIZATION` tab:
+
+<img width="1082" alt="Screenshot 2024-10-25 at 10 27 20" src="https://github.com/user-attachments/assets/5a5355d9-48d8-4f28-810e-fd158c4b0351">
+
+From there you can see the `Query` value for this graph. In this example it is defined as:
+```
+host_CPU_Percent_Merge{time='real',dc=~'$dc',rack=~'$rack',host_id=~'$host_id'}
+```
+This query has some templated variables `$dc, $rack, $host_id` - these are used to pass in parameters selected in the dashboard GUI and we dont want these for extraction purposes, unless you want to substitute values in for the extract.
+
+You have several options with this query. The first option `host_CPU_Percent_Merge` will return a large volume of data, it will return the raw values for every single server in the cluster. Things to consider as an alternative is to group the data by dc, keyspace or whatever way you want to group the data. Additionally you can use aggregate functions like `sum` etc.. Visit the [AxonOps documentation](https://docs.axonops.com/monitoring/metricsdashboards/querysyntax/) to find out more.
 
 ### Python3 Setup and AxonOps API Key
 
