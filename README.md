@@ -35,7 +35,7 @@ This will extract all the data for September 2024 returned by the queries in myq
   - [Query Configuration Setup](#query-configuration-setup)
     - [JSON Field Information](#json-field-information)
     - [How to find values for `axon_query`](#how-to-find-values-for-axon_query)
-  - [Python3 Setup and AxonOps API Key](#python3-setup-and-axonops-api-key)
+  - [Setup Steps]([#setup-steps))
     * [Clone the Repository](#1-clone-the-repository)
     * [Generate an AxonOps API token for your organisation](#2-generate-an-axonops-api-token-for-your-organisation)
     * [Set-up your AxonOps organisation and API tokens as environment variables](#3-set-up-your-axonops-organisation-and-api-tokens-as-environment-variables)
