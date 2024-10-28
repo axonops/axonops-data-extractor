@@ -50,7 +50,7 @@ This will extract all the data for September 2024 returned by the queries in myq
 
 ### Query Configuration Setup
 
-The `--queryconfig` argument should be pointing at a JSON file the defines the queries to run, the results of which will be converted to CSV. There is an example you can see in `data/queryconfig/query_config_example.json`.
+The `--queryconfig` argument should be pointing at a JSON file that defines the queries to run, the results of which will be converted to CSV. There is an example you can see in `data/queryconfig/query_config_example.json`.
 
 The file looks roughly like this:
 
