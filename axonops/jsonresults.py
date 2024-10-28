@@ -16,6 +16,8 @@ import uuid
 import datetime
 import json
 
+from yaspin import yaspin
+
 from axonops.logger import setup_logger
 from axonops.util.apiconfig import get_axonops_org_id
 
@@ -46,7 +48,9 @@ def write_json_results_file(json_result, directory, suffix, cluster_name, keyspa
 
     # Write JSON data to the file
     logger.info(f"{cluster_name} - Writing {file_path} with JSON")
-    with open(file_path, 'w') as file:
-        json.dump(json_result, file, indent=4)
+    with yaspin(text=f"Writing JSON results to disk") as spinner:
+        with open(file_path, 'w') as file:
+            json.dump(json_result, file, indent=4)
+        spinner.ok("✔")
 
     return file_path

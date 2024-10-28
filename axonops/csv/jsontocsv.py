@@ -15,6 +15,9 @@ import json
 import pandas as pd
 import csv
 import os
+
+from yaspin import yaspin
+
 from axonops.logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -29,33 +32,36 @@ def json_to_csv(json_file, deletejson: bool = True):
     # Prepare lists for DataFrame columns
     all_data = []
 
-    # Check if 'result' is part of the data
-    if 'data' in data and 'result' in data['data']:
-        # Iterate over each metric result
-        for result in data['data']['result']:
-            # Skip metrics with no values
-            if 'values' not in result or not result['values']:
-                continue
+    with yaspin(text=f"Converting JSON to CSV") as spinner:
+        # Check if 'result' is part of the data
+        if 'data' in data and 'result' in data['data']:
+            # Iterate over each metric result
+            for result in data['data']['result']:
+                # Skip metrics with no values
+                if 'values' not in result or not result['values']:
+                    continue
 
-            # Extract all available metric information dynamically
-            metric_info = result.get('metric', {})
+                # Extract all available metric information dynamically
+                metric_info = result.get('metric', {})
 
-            # Loop through each timestamp-value pair
-            for pair in result['values']:
-                if len(pair) == 2:
-                    timestamp, value = pair
-                    # Combine metric info with timestamp-value pair
-                    all_data.append({
-                        **metric_info,  # Include all metric fields dynamically
-                        'unix_timestamp': timestamp,
-                        'value': value
-                    })
+                # Loop through each timestamp-value pair
+                for pair in result['values']:
+                    if len(pair) == 2:
+                        timestamp, value = pair
+                        # Combine metric info with timestamp-value pair
+                        all_data.append({
+                            **metric_info,  # Include all metric fields dynamically
+                            'unix_timestamp': timestamp,
+                            'value': value
+                        })
 
-    # Create a DataFrame from the list of dictionaries
-    all_data_df = pd.DataFrame(all_data)
+        # Create a DataFrame from the list of dictionaries
+        all_data_df = pd.DataFrame(all_data)
 
-    # Save DataFrame to CSV with proper quoting, excluding an index
-    all_data_df.to_csv(csv_file, index=False, quotechar='"', quoting=csv.QUOTE_ALL)
+        # Save DataFrame to CSV with proper quoting, excluding an index
+        all_data_df.to_csv(csv_file, index=False, quotechar='"', quoting=csv.QUOTE_ALL)
+
+        spinner.ok("✔")
 
     if deletejson:
         os.remove(json_file)

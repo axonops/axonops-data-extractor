@@ -13,6 +13,8 @@
 #  limitations under the License.
 from typing import Optional, List
 
+from yaspin import yaspin
+
 from axonops.queryconfig import Rename
 from axonops.util.apiconfig import get_axonops_org_id, get_axonops_dash_url, get_headers
 from axonops.logger import setup_logger
@@ -57,7 +59,11 @@ def query_api(description, unit, axon_query, start_date, end_date, cluster_name,
         url = _generate_url(cluster_name, start_date, end_date, axon_query)
         # Make the GET request with headers
         start_time = time.time()  # Record the start time
-        response = requests.get(url, headers=get_headers())
+
+        with yaspin(text=f"Querying AxonOps") as spinner:
+            response = requests.get(url, headers=get_headers())
+            spinner.ok("✔")
+
         # Raise an exception if the request was unsuccessful
         response.raise_for_status()
         end_time = time.time()  # Record the end time
