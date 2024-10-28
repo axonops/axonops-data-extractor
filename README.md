@@ -110,7 +110,7 @@ This query has some templated variables `$dc, $rack, $host_id` - these are used 
 
 You have several options with this query. The first option `host_CPU_Percent_Merge` will return a large volume of data, it will return the raw values for every single server in the cluster. Things to consider as an alternative is to group the data by dc, keyspace or whatever way you want to group the data. Additionally you can use aggregate functions like `sum` etc.. Visit the [AxonOps documentation](https://docs.axonops.com/monitoring/metricsdashboards/querysyntax/) to find out more.
 
-### Python3 Setup and AxonOps API Key
+### Setup Steps
 
 You need to install Python 3 for this application, a good resource is the official Python website. You can find installation instructions and download links for various operating systems there. 
 - [Python Downloads](https://www.python.org/downloads/) - This page provides the latest releases of Python for Windows, macOS, and other platforms, along with detailed installation instructions.
