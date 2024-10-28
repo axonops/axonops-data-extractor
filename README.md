@@ -29,7 +29,7 @@ python axonops_csv_extractor.py --outputdir data/results/mydata --queryconfig da
 ```
 
 This will extract all the data for September 2024 returned by the queries in myqueries.json and store it as CSV files in data/results/mydata
-https://github.com/axonops/axonops-csv-extractor/edit/main/README.md#how-to-find-values-for-axon_query
+
 ***
 - [Setup Instructions](#setup-instructions)
   - [Query Configuration Setup](#query-configuration-setup)
