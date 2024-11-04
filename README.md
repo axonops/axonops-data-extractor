@@ -140,6 +140,8 @@ Click the Generate button and then you can copy the API token to use in Step 3.
 
 <img width="604" alt="Generated Token" src="https://github.com/user-attachments/assets/4632bd45-e444-46c9-b139-13aca0ec3924">
 
+(obviously that token is not valid 😊)
+
 #### **3. Set-up your AxonOps organisation and API tokens as environment variables**
 
 To interact with the AxonOps APIs to query its data you need to store your organisation and API key as environment variables in a new `.env` you need to create in the root directory of the repo. 
