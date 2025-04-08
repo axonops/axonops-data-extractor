@@ -49,6 +49,7 @@ options:
   -d, --deletejson      If set, the downloaded JSON will be kept in the output directory. By default it is automatically deleted after being converted to CSV.
 ```
 
+For example
 
 ```bash
 python axonops_hourly_csv_extractor.py --outputdir data/results/mydata --queryconfig data/queryconfig/myqueries.json -hourofyear 20240923

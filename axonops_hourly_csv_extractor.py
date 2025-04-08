@@ -41,7 +41,7 @@ def parse_arguments():
     )
 
     parser.add_argument(
-        '-hy', '--hourofofyear',
+        '-hy', '--hourofyear',
         type=validate_hour_of_year,
         required=True,
         help="The hour of year in format YYYYMMDDHH for which data will be extracted to CSV. This can not be in the future nor the current hour"
@@ -57,7 +57,7 @@ def parse_arguments():
     args = parser.parse_args()
 
     # Unpack hour of year into two separate variables
-    start_timestamp, end_timestamp, queryhour = args.hourofofyear
+    start_timestamp, end_timestamp, queryhour = args.hourofyear
 
     return args.outputdir, args.queryconfig, start_timestamp, end_timestamp, queryhour, args.deletejson
 
