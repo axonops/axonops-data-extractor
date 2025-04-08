@@ -34,19 +34,22 @@ This will extract all the data for `September 2024` returned by the queries in m
 
 ## Hourly Data
 ```
-usage: axonops_hourly_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m HOUROFYEAR [-d]
+usage: axonops_hourly_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -hy HOUROFYEAR [-d]
 
-AxonOps Monthly CSV Extractor
+AxonOps Hourly CSV Extractor
 
 options:
   -h, --help            show this help message and exit
-  -o OUTPUTDIR, --outputdir OUTPUTDIR
+  -o, --outputdir OUTPUTDIR
                         The file path to a directory for outputting the CSV data.
-  -q QUERYCONFIG, --queryconfig QUERYCONFIG
-                        File path to the JSON configuration file listing the queries to run and extract to CSV. See the README.md for more information on this configuration file.
-  -hy HOUROFYEAR, --hourofyear HOUROFYEAR
-                        The hour of year in format YYYYMMDDHH for which data will be extracted to CSV. This can not be in the future nor the current hour
-  -d, --deletejson      If set, the downloaded JSON will be kept in the output directory. By default it is automatically deleted after being converted to CSV.
+  -q, --queryconfig QUERYCONFIG
+                        File path to the JSON configuration file listing the queries to run and extract to CSV. See the README.md for more
+                        information on this configuration file.
+  -hy, --hourofyear HOUROFYEAR
+                        The hour of year in format YYYYMMDDHH for which data will be extracted to CSV. This can not be in the future nor
+                        the current hour
+  -d, --deletejson      If set, the downloaded JSON will be kept in the output directory. By default it is automatically deleted after
+                        being converted to CSV.
 ```
 
 For example
