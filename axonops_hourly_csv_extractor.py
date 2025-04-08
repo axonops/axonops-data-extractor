@@ -121,6 +121,36 @@ def validate_month_of_year(value):
 
     return start_of_month, start_of_next_month, querymonth
 
+def validate_hour_of_year(value):
+    """Validate the hour of year format and calculate Unix timestamps."""
+    try:
+        # Parse the input as YYYYMMDDHH
+        date = datetime.datetime.strptime(value, "%Y%m%d%H")
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"Hour of year '{value}' is not in the format YYYYMMDDHH.")
+
+    # Get the current date and time rounded to the hour
+    current_date_time = datetime.datetime.now().replace(minute=0, second=0, microsecond=0)
+
+    # Ensure the input hour is at least one hour before the current hour
+    if date >= current_date_time:
+        raise argparse.ArgumentTypeError(
+            "Hour of year cannot be in the current or future hour. "
+            "Provide an hour in the past (at least one hour before the current time)."
+        )
+
+    # Calculate Unix timestamps for the start of the given hour
+    start_of_hour = int(time.mktime(date.timetuple()))
+    end_of_hour = start_of_hour + 3600 - 1  # Add 1 hour minus 1 second for the end timestamp
+
+    # Convert the provided hour into an integer for easy return
+    queryhour = int(value)
+
+    # Return start and end of the hour, as well as the queryhour
+    return start_of_hour, end_of_hour, queryhour
+
+
+
 def main():
     # Parse arguments first
     outputdir, queryconfig, start_timestamp, end_timestamp, querymonth, deletejson = parse_arguments()
