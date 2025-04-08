@@ -2,13 +2,15 @@
 
 The AxonOps Data Extractor is a Python utility designed to extract and download data from AxonOps. This tool is particularly useful for integrating into data pipelines, data warehouses or ETL workflows
 
-You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_csv_extractor.py`.
+You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_monthly_csv_extractor.py`.
 
-To get it working, load the Python dependencies in `requirements.txt` into your Python environment and then run the Python script `axonops_csv_extractor.py`
+To get it working, load the Python dependencies in `requirements.txt` into your Python environment and then run the corresponding Python script below.
+
+## Monthly Data
 ```
-usage: axonops_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
+usage: axonops_monthly_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
 
-AxonOps CSV Extractor
+AxonOps Monthly CSV Extractor
 
 options:
   -h, --help            show this help message and exit
@@ -25,10 +27,35 @@ options:
 
 For example
 ```bash
-python axonops_csv_extractor.py --outputdir data/results/mydata --queryconfig data/queryconfig/myqueries.json --monthofyear 202409
+python axonops_monthly_csv_extractor.py --outputdir data/results/mydata --queryconfig data/queryconfig/myqueries.json --monthofyear 202409
 ```
 
-This will extract all the data for September 2024 returned by the queries in myqueries.json and store it as CSV files in data/results/mydata
+This will extract all the data for `September 2024` returned by the queries in myqueries.json and store it as CSV files in data/results/mydata
+
+## Hourly Data
+```
+usage: axonops_hourly_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m HOUROFYEAR [-d]
+
+AxonOps Monthly CSV Extractor
+
+options:
+  -h, --help            show this help message and exit
+  -o OUTPUTDIR, --outputdir OUTPUTDIR
+                        The file path to a directory for outputting the CSV data.
+  -q QUERYCONFIG, --queryconfig QUERYCONFIG
+                        File path to the JSON configuration file listing the queries to run and extract to CSV. See the README.md for more information on this configuration file.
+  -hy HOUROFYEAR, --hourofyear HOUROFYEAR
+                        The hour of year in format YYYYMMDDHH for which data will be extracted to CSV. This can not be in the future nor the current hour
+  -d, --deletejson      If set, the downloaded JSON will be kept in the output directory. By default it is automatically deleted after being converted to CSV.
+```
+
+For example
+
+```bash
+python axonops_hourly_csv_extractor.py --outputdir data/results/mydata --queryconfig data/queryconfig/myqueries.json -hourofyear 20240923
+```
+
+This will extract all the data for `9th September 2024 23:00` returned by the queries in myqueries.json and store it as CSV files in data/results/mydata
 
 ***
 - [Setup Instructions](#setup-instructions)
@@ -204,12 +231,12 @@ This command reads the `requirements.txt` file and installs all specified packag
 Now that all dependencies are installed, you can run the main Python script:
 
 ```bash
-python axonops_csv_extractor.py [options]
+python axonops_monthly_csv_extractor.py [options]
 ```
 
 Usage:
 ```bash
-usage: axonops_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
+usage: axonops_monthly_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
 
 AxonOps CSV Extractor
 
