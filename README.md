@@ -1,6 +1,6 @@
-# AxonOps™ CSV Extractor
+# AxonOps™ Data Extractor
 
-The AxonOps CSV Extractor is a Python utility designed to extract monthly data from AxonOps and convert it to CSV files. This tool is particularly useful for integrating into data pipelines, data warehouses or ETL workflows
+The AxonOps Data Extractor is a Python utility designed to extract and download data from AxonOps. This tool is particularly useful for integrating into data pipelines, data warehouses or ETL workflows
 
 You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_csv_extractor.py`.
 
