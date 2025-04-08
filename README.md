@@ -2,7 +2,7 @@
 
 The AxonOps Data Extractor is a Python utility designed to extract and download data from AxonOps. This tool is particularly useful for integrating into data pipelines, data warehouses or ETL workflows
 
-You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_monthly_csv_extractor.py`.
+You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run one of the scripts.
 
 To get it working, load the Python dependencies in `requirements.txt` into your Python environment and then run the corresponding Python script below.
 
