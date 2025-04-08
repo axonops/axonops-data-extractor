@@ -126,7 +126,7 @@ cd axonops-csv-extractor
 
 #### **2. Generate an AxonOps API token for your organisation**
 
-Login to your AxonOps console. For the SaaS console go to http://console.axonops.com. 
+Login to your AxonOps console. For the SaaS console go to https://console.axonops.com. 
 
 Once you have logged in, choose the organisation you want to create an API token for. Then enter the API Tokens section:
 
