@@ -2,13 +2,13 @@
 
 The AxonOps Data Extractor is a Python utility designed to extract and download data from AxonOps. This tool is particularly useful for integrating into data pipelines, data warehouses or ETL workflows
 
-You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_csv_extractor.py`.
+You simply add your AxonOps API keys as environment variables, create a report config (see `data/queryconfig/query_config_example.json`) and then run `axonops_monthly_csv_extractor.py`.
 
-To get it working, load the Python dependencies in `requirements.txt` into your Python environment and then run the Python script `axonops_csv_extractor.py`
+To get it working, load the Python dependencies in `requirements.txt` into your Python environment and then run the Python script `axonops_monthly_csv_extractor.py`
 ```
-usage: axonops_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
+usage: axonops_monthly_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
 
-AxonOps CSV Extractor
+AxonOps Monthly CSV Extractor
 
 options:
   -h, --help            show this help message and exit
@@ -25,7 +25,7 @@ options:
 
 For example
 ```bash
-python axonops_csv_extractor.py --outputdir data/results/mydata --queryconfig data/queryconfig/myqueries.json --monthofyear 202409
+python axonops_monthly_csv_extractor.py --outputdir data/results/mydata --queryconfig data/queryconfig/myqueries.json --monthofyear 202409
 ```
 
 This will extract all the data for September 2024 returned by the queries in myqueries.json and store it as CSV files in data/results/mydata
@@ -204,12 +204,12 @@ This command reads the `requirements.txt` file and installs all specified packag
 Now that all dependencies are installed, you can run the main Python script:
 
 ```bash
-python axonops_csv_extractor.py [options]
+python axonops_monthly_csv_extractor.py [options]
 ```
 
 Usage:
 ```bash
-usage: axonops_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
+usage: axonops_monthly_csv_extractor.py [-h] -o OUTPUTDIR -q QUERYCONFIG -m MONTHOFYEAR [-d]
 
 AxonOps CSV Extractor
 

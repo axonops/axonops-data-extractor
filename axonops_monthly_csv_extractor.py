@@ -23,7 +23,7 @@ logger = setup_logger(__name__)
 
 def parse_arguments():
     """Parse and validate command line arguments."""
-    parser = argparse.ArgumentParser(description="AxonOps CSV Extractor")
+    parser = argparse.ArgumentParser(description="AxonOps Monthly CSV Extractor")
 
     parser.add_argument(
         '-o', '--outputdir',
