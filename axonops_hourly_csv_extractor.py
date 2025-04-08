@@ -42,7 +42,7 @@ def parse_arguments():
 
     parser.add_argument(
         '-h', '--hourofofyear',
-        type=validate_month_of_year,
+        type=validate_hour_of_year,
         required=True,
         help="The hour of year in format YYYYMMDDHH for which data will be extracted to CSV. This can not be in the future nor the current hour"
     )
@@ -56,10 +56,10 @@ def parse_arguments():
 
     args = parser.parse_args()
 
-    # Unpack monthofyear into two separate variables
-    start_timestamp, end_timestamp, querymonth = args.monthofyear
+    # Unpack hour of year into two separate variables
+    start_timestamp, end_timestamp, queryhour = args.hourofofyear
 
-    return args.outputdir, args.queryconfig, start_timestamp, end_timestamp, querymonth, args.deletejson
+    return args.outputdir, args.queryconfig, start_timestamp, end_timestamp, queryhour, args.deletejson
 
 
 def __process_cluster_data(results_dir, cluster_name, start_date, end_date, query_config: Query,
@@ -97,30 +97,6 @@ def validate_query_config(path):
     return path
 
 
-def validate_month_of_year(value):
-    """Validate the month of year format and calculate Unix timestamps."""
-    try:
-        date = datetime.datetime.strptime(value, "%Y%m")
-    except ValueError:
-        raise argparse.ArgumentTypeError(f"Month of year '{value}' is not in the format YYYYMM.")
-
-    # Get current date
-    current_date = datetime.datetime.now()
-    current_month_start = datetime.datetime(current_date.year, current_date.month, 1)
-
-    # Check if the date is in the future or the current month
-    if date >= current_month_start:
-        raise argparse.ArgumentTypeError("Month of year cannot be in the future or the current month.")
-
-    # Calculate Unix timestamps
-    start_of_month = int(time.mktime(date.timetuple()))
-    next_month = (date.replace(day=28) + datetime.timedelta(days=4)).replace(day=1)
-    start_of_next_month = int(time.mktime(next_month.timetuple()))
-
-    querymonth = int(value)
-
-    return start_of_month, start_of_next_month, querymonth
-
 def validate_hour_of_year(value):
     """Validate the hour of year format and calculate Unix timestamps."""
     try:
@@ -153,21 +129,21 @@ def validate_hour_of_year(value):
 
 def main():
     # Parse arguments first
-    outputdir, queryconfig, start_timestamp, end_timestamp, querymonth, deletejson = parse_arguments()
+    outputdir, queryconfig, start_timestamp, end_timestamp, queryhour, deletejson = parse_arguments()
 
     # Now you can use these variables for your application logic
     logger.debug(f"Output Directory: {outputdir}")
     logger.debug(f"Query Config: {queryconfig}")
     logger.debug(f"Start Unix Timestamp: {start_timestamp}")
     logger.debug(f"End Unix Timestamp: {end_timestamp}")
-    logger.debug(f"Query Month: {querymonth}")
+    logger.debug(f"Query Month: {queryhour}")
     logger.debug(f"Delete JSON: {deletejson}")
 
     query_data = load_query_config(queryconfig)
     logger.info(f"Query config is loaded from: {queryconfig}")
     logger.debug(f"Query data: {query_data}")
 
-    results_dir = setup_results_directory(outputdir, querymonth)
+    results_dir = setup_results_directory(outputdir, queryhour)
     logger.info(f"CSV output directory setup completed: {results_dir}")
 
     # Iterate over the list of clusters and download the metrics
