@@ -1,4 +1,4 @@
-# AxonOps™ Data Extractor
+# AxonOps® Data Extractor
 
 The AxonOps Data Extractor is a Python utility designed to extract and download data from AxonOps. This tool is particularly useful for integrating into data pipelines, data warehouses or ETL workflows
 
